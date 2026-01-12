@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS todos (
+  id TEXT PRIMARY KEY,
+  text TEXT NOT NULL,
+  done INTEGER DEFAULT 0,
+  created_at INTEGER NOT NULL
+);
