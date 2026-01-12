@@ -28,5 +28,5 @@ CLAUDE.md
 DOT_MVP.md
 
 .vscode
-.github
+.github/copilot-instructions.md
 .beads
