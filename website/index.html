@@ -4,23 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>minidot — The fastest way to dump a thought</title>
-  <meta name="description" content="A tiny menubar app that opens with a shortcut, captures your thought, and disappears.">
+  <meta name="description" content="A tiny menubar app that opens with a shortcut, captures your thought, and disappears. Built for people who hate task apps.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    * {
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist Mono';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-mono/GeistMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
     :root {
-      --bg: #0D0F12;
-      --card: #14171C;
-      --text: #E5E7EB;
-      --text-secondary: #9CA3AF;
-      --accent: #4ADE80;
+      --bg: #000000;
+      --bg-subtle: #0a0a0a;
+      --bg-elevated: #141414;
+      --bg-hover: #1a1a1a;
+      --border: #262626;
+      --border-subtle: #1a1a1a;
+      --text: #fafafa;
+      --text-secondary: #a1a1a1;
+      --text-muted: #525252;
+      --accent: #22c55e;
     }
 
     html {
@@ -28,232 +73,511 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .animate-fade-up {
+      animation: fadeUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+
+    /* Layout */
+    .page {
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-logo {
+      width: 28px;
+      height: 28px;
+    }
+
+    .nav-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    /* Hero */
+    .hero {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
-      line-height: 1.6;
-    }
-
-    .container {
-      max-width: 640px;
-      width: 100%;
       text-align: center;
+      padding: 8rem 2rem 4rem;
+      min-height: 100vh;
     }
 
-    /* Logo */
-    .logo {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 1rem;
-      transition: filter 0.2s ease;
-      cursor: default;
-      user-select: none;
+    .hero-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-bottom: 3rem;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
     }
 
-    .logo:hover {
-      filter: brightness(0) saturate(100%) invert(76%) sepia(47%) saturate(459%) hue-rotate(88deg) brightness(96%) contrast(92%);
-    }
-
-    .brand {
-      font-size: 1.5rem;
+    .hero-title {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
       font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      max-width: 800px;
       margin-bottom: 1.5rem;
-      letter-spacing: -0.02em;
     }
 
-    /* Hero */
-    .tagline {
-      font-size: 1.25rem;
-      color: var(--text);
-      margin-bottom: 0.75rem;
+    .hero-title-muted {
+      color: var(--text-muted);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin-bottom: 3rem;
       font-weight: 400;
     }
 
-    .subtitle {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      margin-bottom: 2rem;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* Download Button */
-    .download-btn {
-      display: inline-flex;
+    /* Keyboard */
+    .keyboard {
+      display: flex;
       align-items: center;
       gap: 0.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+      padding: 0 1rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Geist', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      box-shadow:
+        0 1px 0 1px var(--bg),
+        0 4px 0 0 var(--border-subtle),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: all 0.15s ease;
+    }
+
+    .key:hover {
+      background: var(--bg-hover);
+      transform: translateY(1px);
+      box-shadow:
+        0 1px 0 1px var(--bg),
+        0 2px 0 0 var(--border-subtle),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .key-space {
+      min-width: 100px;
+    }
+
+    /* CTA */
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.875rem 1.5rem;
       background: var(--text);
       color: var(--bg);
-      padding: 0.875rem 1.75rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-family: 'Geist', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 500;
       text-decoration: none;
-      transition: all 0.2s ease;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .download-btn:hover {
-      background: var(--accent);
-      transform: translateY(-1px);
+    .btn-primary:hover {
+      background: #e5e5e5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.1);
     }
 
-    .download-btn svg {
+    .btn-primary svg {
       width: 18px;
       height: 18px;
     }
 
-    /* Features */
-    .features {
+    .cta-hint {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
-      margin: 3rem 0;
-    }
-
-    .feature {
-      display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      animation: pulse 2s infinite;
     }
 
-    .kbd {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
+    .scroll-indicator svg {
+      width: 20px;
+      height: 20px;
     }
 
-    .kbd span {
-      background: var(--card);
-      padding: 0.35rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      color: var(--text);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+    /* Features Section */
+    .features {
+      padding: 6rem 2rem;
+      background: var(--bg-subtle);
+      border-top: 1px solid var(--border-subtle);
     }
 
-    .kbd svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    /* Screenshot */
-    .screenshot-container {
-      margin: 3rem 0;
-      padding: 2rem;
-      background: var(--card);
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .screenshot {
-      width: 100%;
-      max-width: 320px;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    }
-
-    .screenshot-placeholder {
-      width: 100%;
-      max-width: 320px;
-      height: 200px;
-      background: var(--bg);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-secondary);
-      font-size: 0.85rem;
+    .features-container {
+      max-width: 900px;
       margin: 0 auto;
     }
 
-    /* Footer */
-    .footer {
-      margin-top: 3rem;
+    .features-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .features-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .features-title {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .feature-item:last-child {
+      border-bottom: none;
+    }
+
+    .feature-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .feature-text {
+      font-size: 1.125rem;
       color: var(--text-secondary);
-      font-size: 0.85rem;
+      font-weight: 400;
+    }
+
+    .feature-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Philosophy Section */
+    .philosophy {
+      padding: 8rem 2rem;
+      text-align: center;
+    }
+
+    .philosophy-quote {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 400;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.5;
+    }
+
+    .philosophy-quote em {
+      color: var(--text);
+      font-style: normal;
+    }
+
+    .philosophy-author {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .footer-text {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .footer-link {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: var(--text-secondary);
     }
 
     /* Responsive */
-    @media (max-width: 480px) {
-      .logo {
-        width: 64px;
-        height: 64px;
+    @media (max-width: 640px) {
+      nav {
+        padding: 1rem;
       }
 
-      .tagline {
-        font-size: 1.1rem;
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 6rem 1.5rem 3rem;
+      }
+
+      .keyboard {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .key {
+        min-width: 40px;
+        height: 40px;
+        font-size: 0.875rem;
       }
 
       .features {
-        align-items: flex-start;
-        text-align: left;
-        padding-left: 1rem;
+        padding: 4rem 1.5rem;
       }
 
-      .feature {
-        justify-content: flex-start;
+      .feature-item {
+        padding: 1.25rem 0;
+      }
+
+      .feature-text {
+        font-size: 1rem;
+      }
+
+      .philosophy {
+        padding: 5rem 1.5rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Hero -->
-    <img src="../public/logo.png" alt="minidot" class="logo">
-    <h1 class="brand">minidot</h1>
-    <p class="tagline">The fastest way to dump a thought without breaking flow.</p>
-    <p class="subtitle">A tiny menubar app that opens with a shortcut, captures your thought, and disappears.</p>
+  <div class="page">
+    <!-- Navigation -->
+    <nav>
+      <a href="/" class="nav-brand">
+        <img src="../public/logo.png" alt="minidot" class="nav-logo">
+        <span class="nav-name">minidot</span>
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/mxrqz/minidot" class="nav-link">GitHub</a>
+      </div>
+    </nav>
 
-    <!-- Download -->
-    <a href="#" class="download-btn">
-      <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
-      </svg>
-      Download for macOS
-    </a>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-dot animate-fade-up"></div>
+
+      <h1 class="hero-title animate-fade-up delay-1">
+        The fastest way to<br>
+        <span class="hero-title-muted">dump a thought</span>
+      </h1>
+
+      <p class="hero-subtitle animate-fade-up delay-2">
+        Opens. Captures. Disappears.<br>
+        Nothing more.
+      </p>
+
+      <div class="keyboard animate-fade-up delay-3">
+        <span class="key">⌥</span>
+        <span class="key">⇧</span>
+        <span class="key key-space">Space</span>
+      </div>
+
+      <div class="cta-group animate-fade-up delay-4">
+        <a href="#" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+          </svg>
+          Download for macOS
+        </a>
+        <span class="cta-hint">Free &middot; macOS 12+</span>
+      </div>
+
+      <div class="scroll-indicator animate-fade-up delay-5">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
+    </section>
 
     <!-- Features -->
-    <div class="features">
-      <div class="feature">
-        <div class="kbd">
-          <span>⌥</span>
-          <span>⇧</span>
-          <span>Space</span>
+    <section class="features">
+      <div class="features-container">
+        <div class="features-header">
+          <p class="features-label">Anti-task app</p>
+          <h2 class="features-title">Built for people who hate task apps</h2>
         </div>
-        <span>to open</span>
-      </div>
-      <div class="feature">
-        <span>Type. Enter. Gone.</span>
-      </div>
-      <div class="feature">
-        <span>Sync & export when you need</span>
-      </div>
-    </div>
 
-    <!-- Screenshot -->
-    <div class="screenshot-container">
-      <div class="screenshot-placeholder">
-        Screenshot coming soon
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <p class="feature-text"><strong>Type. Enter. Gone.</strong> — Your thought is saved instantly</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <p class="feature-text"><strong>Lives in your menubar</strong> — Always one shortcut away</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <p class="feature-text"><strong>No lists. No dashboards.</strong> — Just a field that appears and vanishes</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot"></div>
+            <p class="feature-text"><strong>Keyboard-first</strong> — Navigate everything without touching your mouse</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section class="philosophy">
+      <p class="philosophy-quote">
+        "<em>Write. Close. Keep working.</em>"
+      </p>
+      <p class="philosophy-author">The minidot philosophy</p>
+    </section>
 
     <!-- Footer -->
-    <footer class="footer">
-      Built for people who hate task apps.
+    <footer>
+      <p class="footer-text">Made for people who think too fast for task apps.</p>
+      <div class="footer-links">
+        <a href="https://github.com/mxrqz/minidot" class="footer-link">GitHub</a>
+        <a href="#" class="footer-link">Releases</a>
+      </div>
     </footer>
   </div>
 </body>
