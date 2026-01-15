@@ -12,6 +12,7 @@ import SearchModal from "./ui/SearchModal";
 import SettingsModal from "./ui/SettingsModal";
 import Toast from "./ui/Toast";
 import UndoToast from "./ui/UndoToast";
+import GridBackground from "./ui/GridBackground";
 // Initialize theme on app load
 import "./state/themeStore";
 
@@ -107,6 +108,7 @@ function App() {
         boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.04)",
       }}
     >
+      <GridBackground />
       <PageContent onPageChange={handlePageChange} />
       <PageDots />
       <Toast />

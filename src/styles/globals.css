@@ -34,6 +34,10 @@
   --bg-grid-opacity: 0.03;
   --bg-grid-size: 64px;
   --bg-noise-opacity: 0.08;
+  /* Square fill opacities (3 layers for variety) */
+  --bg-fill-opacity-1: 0.06;
+  --bg-fill-opacity-2: 0.04;
+  --bg-fill-opacity-3: 0.05;
 }
 
 /* Dark theme */
@@ -68,6 +72,10 @@
   --bg-grid-color: 255, 255, 255; /* White lines for dark mode */
   --bg-grid-opacity: 0.01;
   --bg-noise-opacity: 0.06;
+  /* Square fill opacities (3 layers for variety) */
+  --bg-fill-opacity-1: 0.04;
+  --bg-fill-opacity-2: 0.03;
+  --bg-fill-opacity-3: 0.035;
 }
 
 /* Window open/close animations */
@@ -204,7 +212,7 @@ html, body {
   position: relative;
 }
 
-/* Layer 1: Grid pattern + spotlight glow */
+/* Spotlight glow */
 #app-container::before {
   content: "";
   position: absolute;
@@ -213,28 +221,14 @@ html, body {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   border-radius: inherit;
-  background:
-    /* Spotlight glow on top */
-    radial-gradient(
-      ellipse 100% 70% at 50% -10%,
-      rgba(var(--bg-spotlight-color), var(--bg-spotlight-opacity-start)) 0%,
-      rgba(var(--bg-spotlight-color), var(--bg-spotlight-opacity-end)) 40%,
-      transparent 70%
-    ),
-    /* Grid lines */
-    linear-gradient(
-      to right,
-      rgba(var(--bg-grid-color), var(--bg-grid-opacity)) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(var(--bg-grid-color), var(--bg-grid-opacity)) 1px,
-      transparent 1px
-    );
-  background-size: 100% 100%, var(--bg-grid-size) var(--bg-grid-size), var(--bg-grid-size) var(--bg-grid-size);
+  background: radial-gradient(
+    ellipse 100% 70% at 50% -10%,
+    rgba(var(--bg-spotlight-color), var(--bg-spotlight-opacity-start)) 0%,
+    rgba(var(--bg-spotlight-color), var(--bg-spotlight-opacity-end)) 40%,
+    transparent 70%
+  );
 }
 
 /* Layer 2: Noise texture */
