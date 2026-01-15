@@ -139,7 +139,7 @@ function PageContent({ onPageChange }: PageContentProps) {
       <div
         ref={contentRef}
         className={`flex-1 flex flex-col overflow-hidden ${animationClass}`}
-        style={{ willChange: "transform, opacity" }}
+        style={{ willChange: "transform, opacity", position: "relative", zIndex: 1 }}
         onAnimationEnd={handleAnimationEnd}
       >
         {/* Page Title */}
@@ -171,7 +171,7 @@ function PageContent({ onPageChange }: PageContentProps) {
 
       {/* Notification */}
       {notification && (
-        <div className="absolute bottom-16 left-0 right-0 flex justify-center pointer-events-none">
+        <div className="absolute bottom-16 left-0 right-0 flex justify-center pointer-events-none z-10">
           <div
             className="notification-expand backdrop-blur-md text-xs px-3 py-1.5 rounded-full"
             style={{ background: "var(--color-bg-elevated)", color: "var(--color-text-secondary)" }}

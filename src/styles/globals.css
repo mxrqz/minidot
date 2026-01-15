@@ -25,6 +25,19 @@
   --color-modal-bg: rgb(255, 255, 255);
   --color-scrollbar: rgba(0, 0, 0, 0.15);
   --color-scrollbar-hover: rgba(0, 0, 0, 0.25);
+
+  /* Background effects - light mode (more visible) */
+  --bg-spotlight-color: 99, 102, 241; /* RGB values for spotlight */
+  --bg-spotlight-opacity-start: 0.30;
+  --bg-spotlight-opacity-end: 0.10;
+  --bg-grid-color: 0, 0, 0; /* Black lines for light mode */
+  --bg-grid-opacity: 0.03;
+  --bg-grid-size: 64px;
+  --bg-noise-opacity: 0.08;
+  /* Square fill opacities (3 layers for variety) */
+  --bg-fill-opacity-1: 0.06;
+  --bg-fill-opacity-2: 0.04;
+  --bg-fill-opacity-3: 0.05;
 }
 
 /* Dark theme */
@@ -51,6 +64,18 @@
   --color-modal-bg: rgb(44, 44, 46);
   --color-scrollbar: rgba(255, 255, 255, 0.2);
   --color-scrollbar-hover: rgba(255, 255, 255, 0.3);
+
+  /* Background effects - dark mode */
+  --bg-spotlight-color: 129, 140, 248; /* RGB values for spotlight */
+  --bg-spotlight-opacity-start: 0.08;
+  --bg-spotlight-opacity-end: 0.03;
+  --bg-grid-color: 255, 255, 255; /* White lines for dark mode */
+  --bg-grid-opacity: 0.01;
+  --bg-noise-opacity: 0.06;
+  /* Square fill opacities (3 layers for variety) */
+  --bg-fill-opacity-1: 0.04;
+  --bg-fill-opacity-2: 0.03;
+  --bg-fill-opacity-3: 0.035;
 }
 
 /* Window open/close animations */
@@ -176,6 +201,52 @@ html, body {
 #root {
   height: 100vh;
   width: 100vw;
+}
+
+/* ============================================
+   Premium Background Effects
+   ============================================ */
+
+/* Main app container background enhancement */
+#app-container {
+  position: relative;
+}
+
+/* Spotlight glow */
+#app-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse 100% 70% at 50% -10%,
+    rgba(var(--bg-spotlight-color), var(--bg-spotlight-opacity-start)) 0%,
+    rgba(var(--bg-spotlight-color), var(--bg-spotlight-opacity-end)) 40%,
+    transparent 70%
+  );
+}
+
+/* Layer 2: Noise texture */
+#app-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px;
+  opacity: var(--bg-noise-opacity);
+  mix-blend-mode: overlay;
 }
 
 /* Hide scrollbar but keep functionality */

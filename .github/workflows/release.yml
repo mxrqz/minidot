@@ -1,20 +1,8 @@
-name: Release
+name: Build Release
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'src-tauri/**'
-      - 'package.json'
-      - 'bun.lock'
-      - 'vite.config.ts'
-      - 'tailwind.config.ts'
-      - 'postcss.config.js'
-      - 'tsconfig.json'
-      - 'tsconfig.node.json'
-      - 'index.html'
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -54,14 +42,15 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Build and release
+      - name: Build and upload to release
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          # When triggered by release event, upload to that release
+          # When triggered manually, create a new release
+          releaseId: ${{ github.event.release.id || '' }}
           tagName: v__VERSION__
           releaseName: "minidot v__VERSION__"
-          releaseBody: "See the assets to download and install this version."
-          releaseDraft: false
-          prerelease: false
+          releaseDraft: true
           args: ${{ matrix.args }}
