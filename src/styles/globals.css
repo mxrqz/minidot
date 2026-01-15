@@ -25,6 +25,15 @@
   --color-modal-bg: rgb(255, 255, 255);
   --color-scrollbar: rgba(0, 0, 0, 0.15);
   --color-scrollbar-hover: rgba(0, 0, 0, 0.25);
+
+  /* Background effects - light mode (more visible) */
+  --bg-spotlight-color: 99, 102, 241; /* RGB values for spotlight */
+  --bg-spotlight-opacity-start: 0.30;
+  --bg-spotlight-opacity-end: 0.10;
+  --bg-grid-color: 0, 0, 0; /* Black lines for light mode */
+  --bg-grid-opacity: 0.03;
+  --bg-grid-size: 64px;
+  --bg-noise-opacity: 0.08;
 }
 
 /* Dark theme */
@@ -51,6 +60,14 @@
   --color-modal-bg: rgb(44, 44, 46);
   --color-scrollbar: rgba(255, 255, 255, 0.2);
   --color-scrollbar-hover: rgba(255, 255, 255, 0.3);
+
+  /* Background effects - dark mode */
+  --bg-spotlight-color: 129, 140, 248; /* RGB values for spotlight */
+  --bg-spotlight-opacity-start: 0.08;
+  --bg-spotlight-opacity-end: 0.03;
+  --bg-grid-color: 255, 255, 255; /* White lines for dark mode */
+  --bg-grid-opacity: 0.01;
+  --bg-noise-opacity: 0.06;
 }
 
 /* Window open/close animations */
@@ -202,28 +219,22 @@ html, body {
     /* Spotlight glow on top */
     radial-gradient(
       ellipse 100% 70% at 50% -10%,
-      rgba(99, 102, 241, 0.12) 0%,
-      rgba(99, 102, 241, 0.04) 40%,
+      rgba(var(--bg-spotlight-color), var(--bg-spotlight-opacity-start)) 0%,
+      rgba(var(--bg-spotlight-color), var(--bg-spotlight-opacity-end)) 40%,
       transparent 70%
     ),
-    /* White grid lines */
+    /* Grid lines */
     linear-gradient(
       to right,
-      rgba(255, 255, 255, 0.03) 1px,
+      rgba(var(--bg-grid-color), var(--bg-grid-opacity)) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.03) 1px,
+      rgba(var(--bg-grid-color), var(--bg-grid-opacity)) 1px,
       transparent 1px
-    ),
-    /* Subtle purple fill for each cell */
-    linear-gradient(
-      to bottom right,
-      rgba(99, 102, 241, 0.02) 0%,
-      rgba(129, 140, 248, 0.01) 100%
     );
-  background-size: 100% 100%, 64px 64px, 64px 64px, 64px 64px;
+  background-size: 100% 100%, var(--bg-grid-size) var(--bg-grid-size), var(--bg-grid-size) var(--bg-grid-size);
 }
 
 /* Layer 2: Noise texture */
@@ -240,42 +251,8 @@ html, body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px;
-  opacity: 0.04;
+  opacity: var(--bg-noise-opacity);
   mix-blend-mode: overlay;
-}
-
-/* Dark mode adjustments */
-.dark #app-container::before {
-  background:
-    /* Spotlight glow */
-    radial-gradient(
-      ellipse 100% 70% at 50% -10%,
-      rgba(129, 140, 248, 0.18) 0%,
-      rgba(129, 140, 248, 0.06) 40%,
-      transparent 70%
-    ),
-    /* White grid lines */
-    linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.04) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.04) 1px,
-      transparent 1px
-    ),
-    /* Subtle purple fill for each cell */
-    linear-gradient(
-      to bottom right,
-      rgba(129, 140, 248, 0.03) 0%,
-      rgba(99, 102, 241, 0.015) 100%
-    );
-  background-size: 100% 100%, 64px 64px, 64px 64px, 64px 64px;
-}
-
-.dark #app-container::after {
-  opacity: 0.06;
 }
 
 /* Hide scrollbar but keep functionality */
