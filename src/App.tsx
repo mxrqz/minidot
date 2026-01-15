@@ -104,6 +104,7 @@ function App() {
       style={{
         background: "var(--color-bg)",
         border: "1px solid var(--color-border-subtle)",
+        boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.04)",
       }}
     >
       <PageContent onPageChange={handlePageChange} />

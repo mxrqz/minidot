@@ -7,7 +7,7 @@ function PageDots() {
   if (pages.length <= 1) return null;
 
   return (
-    <div className="flex justify-center gap-1.5 py-2">
+    <div className="flex justify-center gap-1.5 py-2 relative z-10">
       {pages.map((_, index) => (
         <div
           key={index}
