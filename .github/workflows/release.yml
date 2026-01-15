@@ -4,6 +4,18 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'src/**'
+      - 'src-tauri/**'
+      - 'package.json'
+      - 'bun.lock'
+      - 'vite.config.ts'
+      - 'tailwind.config.ts'
+      - 'postcss.config.js'
+      - 'tsconfig.json'
+      - 'tsconfig.node.json'
+      - 'index.html'
+  workflow_dispatch:
 
 jobs:
   release:
