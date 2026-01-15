@@ -187,7 +187,7 @@ html, body {
   position: relative;
 }
 
-/* Layer 1: Spotlight glow from top */
+/* Layer 1: Grid pattern + spotlight glow */
 #app-container::before {
   content: "";
   position: absolute;
@@ -198,13 +198,32 @@ html, body {
   pointer-events: none;
   z-index: 0;
   border-radius: inherit;
-  /* Light mode: warm purple glow */
-  background: radial-gradient(
-    ellipse 100% 70% at 50% -10%,
-    rgba(99, 102, 241, 0.15) 0%,
-    rgba(99, 102, 241, 0.05) 40%,
-    transparent 70%
-  );
+  background:
+    /* Spotlight glow on top */
+    radial-gradient(
+      ellipse 100% 70% at 50% -10%,
+      rgba(99, 102, 241, 0.12) 0%,
+      rgba(99, 102, 241, 0.04) 40%,
+      transparent 70%
+    ),
+    /* White grid lines */
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    /* Subtle purple fill for each cell */
+    linear-gradient(
+      to bottom right,
+      rgba(99, 102, 241, 0.02) 0%,
+      rgba(129, 140, 248, 0.01) 100%
+    );
+  background-size: 100% 100%, 64px 64px, 64px 64px, 64px 64px;
 }
 
 /* Layer 2: Noise texture */
@@ -227,12 +246,32 @@ html, body {
 
 /* Dark mode adjustments */
 .dark #app-container::before {
-  background: radial-gradient(
-    ellipse 100% 70% at 50% -10%,
-    rgba(129, 140, 248, 0.2) 0%,
-    rgba(129, 140, 248, 0.08) 40%,
-    transparent 70%
-  );
+  background:
+    /* Spotlight glow */
+    radial-gradient(
+      ellipse 100% 70% at 50% -10%,
+      rgba(129, 140, 248, 0.18) 0%,
+      rgba(129, 140, 248, 0.06) 40%,
+      transparent 70%
+    ),
+    /* White grid lines */
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px
+    ),
+    /* Subtle purple fill for each cell */
+    linear-gradient(
+      to bottom right,
+      rgba(129, 140, 248, 0.03) 0%,
+      rgba(99, 102, 241, 0.015) 100%
+    );
+  background-size: 100% 100%, 64px 64px, 64px 64px, 64px 64px;
 }
 
 .dark #app-container::after {
