@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/mxrqz/minidot/compare/minidot-v0.2.0...minidot-v0.3.0) (2026-01-15)
+
+
+### Features
+
+* premium background + release-please + multi-platform builds ([#4](https://github.com/mxrqz/minidot/issues/4)) ([39f7bf8](https://github.com/mxrqz/minidot/commit/39f7bf8f11e5d9637c3e588b04f480ccc078abe6))
+
 ## [0.2.0](https://github.com/mxrqz/minidot/compare/minidot-v0.1.0...minidot-v0.2.0) (2026-01-15)
 
 
