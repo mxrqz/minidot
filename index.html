@@ -103,6 +103,49 @@
       50% { opacity: 0.5; }
     }
 
+    /* Keyboard shortcut cycling animation */
+    @keyframes keySwap {
+      0%, 45% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      50%, 95% {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes keySwapAlt {
+      0%, 45% {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      50%, 95% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+    }
+
+    @keyframes labelSwap {
+      0%, 45% { opacity: 1; }
+      50%, 95% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes labelSwapAlt {
+      0%, 45% { opacity: 0; }
+      50%, 95% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
     .animate-fade-up {
       animation: fadeUp 0.8s ease-out forwards;
       opacity: 0;
@@ -290,6 +333,52 @@
       min-width: 100px;
     }
 
+    /* Animated key container */
+    .key-animated {
+      position: relative;
+      min-width: 44px;
+      height: 44px;
+    }
+
+    .key-animated .key {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .key-animated .key-mac {
+      animation: keySwap 6s ease-in-out infinite;
+    }
+
+    .key-animated .key-win {
+      animation: keySwapAlt 6s ease-in-out infinite;
+    }
+
+    /* OS Label under keyboard */
+    .keyboard-label {
+      position: relative;
+      height: 1.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .keyboard-label span {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .keyboard-label .label-mac {
+      animation: labelSwap 6s ease-in-out infinite;
+    }
+
+    .keyboard-label .label-win {
+      animation: labelSwapAlt 6s ease-in-out infinite;
+    }
+
     /* CTA */
     .cta-group {
       position: relative;
@@ -331,6 +420,165 @@
     .cta-hint {
       font-size: 0.8125rem;
       color: var(--text-muted);
+    }
+
+    /* Download buttons grid */
+    .download-grid {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: var(--bg-elevated);
+      color: var(--text);
+      font-family: 'Geist', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-download:hover {
+      background: var(--bg-hover);
+      border-color: var(--border);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-download svg {
+      width: 18px;
+      height: 18px;
+      opacity: 0.8;
+    }
+
+    .btn-download-primary {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .btn-download-primary:hover {
+      background: #e5e5e5;
+      border-color: #e5e5e5;
+    }
+
+    .download-hint {
+      width: 100%;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Platform download buttons */
+    .download-buttons {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .download-container {
+      position: relative;
+    }
+
+    .btn-platform {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-elevated);
+      color: var(--text);
+      font-family: 'Geist', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-platform:hover {
+      background: var(--bg-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-platform svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-platform .chevron {
+      width: 14px;
+      height: 14px;
+      opacity: 0.6;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-platform.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Primary platform button (macOS) */
+    .btn-platform-primary {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    .btn-platform-primary:hover {
+      background: #e5e5e5;
+      border-color: #e5e5e5;
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Platform dropdown */
+    .platform-dropdown {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      min-width: 140px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.375rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      z-index: 100;
+    }
+
+    .platform-dropdown.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .dropdown-item:hover {
+      background: var(--bg-hover);
+      color: var(--text);
     }
 
     /* Scroll indicator */
@@ -517,6 +765,20 @@
       .philosophy {
         padding: 5rem 1.5rem;
       }
+
+      .download-buttons {
+        flex-wrap: wrap;
+      }
+
+      .btn-platform {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.8125rem;
+      }
+
+      .btn-platform svg {
+        width: 14px;
+        height: 14px;
+      }
     }
   </style>
 </head>
@@ -547,20 +809,76 @@
         Nothing more.
       </p>
 
-      <div class="keyboard animate-fade-up delay-3">
-        <span class="key">⌥</span>
-        <span class="key">⇧</span>
-        <span class="key key-space">Space</span>
+      <div class="animate-fade-up delay-3">
+        <div class="keyboard">
+          <div class="key-animated">
+            <span class="key key-mac">⌥</span>
+            <span class="key key-win">Alt</span>
+          </div>
+          <span class="key">⇧</span>
+          <span class="key key-space">Space</span>
+        </div>
+        <div class="keyboard-label">
+          <span class="label-mac">macOS</span>
+          <span class="label-win">Windows / Linux</span>
+        </div>
       </div>
 
       <div class="cta-group animate-fade-up delay-4">
-        <a href="https://github.com/mxrqz/minidot/releases" class="btn-primary">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
-          </svg>
-          Download for macOS
-        </a>
-        <span class="cta-hint">Free · macOS 12+</span>
+        <div class="download-buttons">
+          <!-- Linux -->
+          <div class="download-container">
+            <button class="btn-platform" data-platform="linux">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139z"/>
+              </svg>
+              <span>Linux</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+            <div class="platform-dropdown">
+              <a href="#" data-asset="amd64.deb" class="dropdown-item">.deb</a>
+              <a href="#" data-asset="amd64.AppImage" class="dropdown-item">.AppImage</a>
+              <a href="#" data-asset="x86_64.rpm" class="dropdown-item">.rpm</a>
+            </div>
+          </div>
+
+          <!-- macOS (primary) -->
+          <div class="download-container">
+            <button class="btn-platform btn-platform-primary" data-platform="macos">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.79 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+              </svg>
+              <span>macOS</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+            <div class="platform-dropdown">
+              <a href="#" data-asset="aarch64.dmg" class="dropdown-item">Apple Silicon</a>
+              <a href="#" data-asset="x64.dmg" class="dropdown-item">Intel</a>
+            </div>
+          </div>
+
+          <!-- Windows -->
+          <div class="download-container">
+            <button class="btn-platform" data-platform="windows">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 12V6.75L9 5.43V11.91L3 12ZM20 3V11.75L10 11.9V5.21L20 3ZM3 13L9 13.09V19.9L3 18.75V13ZM20 13.25V22L10 20.09V13.1L20 13.25Z"/>
+              </svg>
+              <span>Windows</span>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </button>
+            <div class="platform-dropdown">
+              <a href="#" data-asset="x64-setup.exe" class="dropdown-item">.exe</a>
+              <a href="#" data-asset="x64_en-US.msi" class="dropdown-item">.msi</a>
+            </div>
+          </div>
+        </div>
+        <span class="download-hint" id="download-version">Free · All platforms</span>
       </div>
 
       <div class="scroll-indicator animate-fade-up delay-5">
@@ -616,5 +934,80 @@
       </div>
     </footer>
   </div>
+  <script>
+    // Fetch latest release and populate download links
+    const REPO = 'mxrqz/minidot';
+
+    async function fetchLatestRelease() {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`);
+        const release = await res.json();
+
+        // Update version hint
+        const version = release.tag_name.replace('minidot-', '').replace('v', '');
+        document.getElementById('download-version').textContent = `Free · v${version}`;
+
+        // Map assets to download links
+        const assets = release.assets;
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+          const assetKey = item.dataset.asset;
+          const asset = assets.find(a => a.name.includes(assetKey));
+          if (asset) {
+            item.href = asset.browser_download_url;
+          }
+        });
+
+      } catch (err) {
+        console.error('Failed to fetch release:', err);
+      }
+    }
+
+    // Platform dropdown toggles
+    const containers = document.querySelectorAll('.download-container');
+
+    containers.forEach(container => {
+      const btn = container.querySelector('.btn-platform');
+      const dropdown = container.querySelector('.platform-dropdown');
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Close all other dropdowns
+        containers.forEach(c => {
+          if (c !== container) {
+            c.querySelector('.btn-platform').classList.remove('open');
+            c.querySelector('.platform-dropdown').classList.remove('open');
+          }
+        });
+
+        // Toggle current dropdown
+        btn.classList.toggle('open');
+        dropdown.classList.toggle('open');
+      });
+
+      // Close dropdown on item click
+      dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+          btn.classList.remove('open');
+          dropdown.classList.remove('open');
+        });
+      });
+    });
+
+    // Close all dropdowns on outside click
+    document.addEventListener('click', (e) => {
+      const isInsideContainer = e.target.closest('.download-container');
+      if (!isInsideContainer) {
+        containers.forEach(container => {
+          container.querySelector('.btn-platform').classList.remove('open');
+          container.querySelector('.platform-dropdown').classList.remove('open');
+        });
+      }
+    });
+
+    // Initialize
+    fetchLatestRelease();
+  </script>
 </body>
 </html>
