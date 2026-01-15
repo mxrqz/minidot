@@ -34,26 +34,7 @@ function GridBackground() {
       className="absolute inset-0 pointer-events-none overflow-hidden"
       style={{ zIndex: 0, borderRadius: "inherit" }}
     >
-      {/* Square fills */}
-      {fills.map((row, rowIndex) =>
-        row.map((filled, colIndex) =>
-          filled ? (
-            <div
-              key={`fill-${rowIndex}-${colIndex}`}
-              className="absolute"
-              style={{
-                left: colIndex * GRID_SIZE,
-                top: rowIndex * GRID_SIZE,
-                width: GRID_SIZE,
-                height: GRID_SIZE,
-                backgroundColor: `rgba(var(--bg-spotlight-color), ${opacities[rowIndex][colIndex]})`,
-                boxShadow: `0 0 20px rgba(var(--bg-spotlight-color), ${opacities[rowIndex][colIndex] * 3})`,
-              }}
-            />
-          ) : null
-        )
-      )}
-
+      {/* Grid lines (rendered first = behind) */}
       {/* Vertical lines */}
       {Array.from({ length: COLS + 1 }).map((_, i) => (
         <div
@@ -79,6 +60,26 @@ function GridBackground() {
           }}
         />
       ))}
+
+      {/* Square fills with glow (rendered last = on top) */}
+      {fills.map((row, rowIndex) =>
+        row.map((filled, colIndex) =>
+          filled ? (
+            <div
+              key={`fill-${rowIndex}-${colIndex}`}
+              className="absolute"
+              style={{
+                left: colIndex * GRID_SIZE,
+                top: rowIndex * GRID_SIZE,
+                width: GRID_SIZE,
+                height: GRID_SIZE,
+                backgroundColor: `rgba(var(--bg-spotlight-color), ${opacities[rowIndex][colIndex]})`,
+                boxShadow: `0 0 20px rgba(var(--bg-spotlight-color), ${opacities[rowIndex][colIndex] * 3})`,
+              }}
+            />
+          ) : null
+        )
+      )}
     </div>
   );
 }
