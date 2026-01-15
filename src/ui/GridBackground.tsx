@@ -47,6 +47,7 @@ function GridBackground() {
                 width: GRID_SIZE,
                 height: GRID_SIZE,
                 backgroundColor: `rgba(var(--bg-spotlight-color), ${opacities[rowIndex][colIndex]})`,
+                boxShadow: `0 0 20px rgba(var(--bg-spotlight-color), ${opacities[rowIndex][colIndex] * 3})`,
               }}
             />
           ) : null
