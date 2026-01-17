@@ -11,7 +11,8 @@ use tauri_plugin_positioner::{Position, WindowExt};
 use tauri_plugin_autostart::MacosLauncher;
 
 // Store tray position for fallback when positioner doesn't have it
-static TRAY_POSITION: Mutex<Option<(i32, i32)>> = Mutex::new(None);
+// Tuple: (center_x, tray_y, tray_height)
+static TRAY_POSITION: Mutex<Option<(i32, i32, u32)>> = Mutex::new(None);
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -24,14 +25,27 @@ fn toggle_window_visibility(app: &tauri::AppHandle) {
             // Emit event so frontend can play close animation then hide
             let _ = app.emit("window-will-hide", ());
         } else {
-            // Position window below tray icon using stored position
+            // Position window relative to tray icon using stored position
             if let Ok(guard) = TRAY_POSITION.lock() {
-                if let Some((x, y)) = *guard {
+                if let Some((x, tray_y, tray_height)) = *guard {
                     let window_size = window.outer_size().unwrap_or(tauri::PhysicalSize { width: 400, height: 500 });
                     let centered_x = x - (window_size.width as i32 / 2);
+
+                    // On Windows, taskbar is at bottom, so position window ABOVE tray
+                    // On macOS/Linux, menu bar is at top, so position window BELOW tray
+                    #[cfg(target_os = "windows")]
+                    let y = tray_y - window_size.height as i32 - 8;
+
+                    #[cfg(not(target_os = "windows"))]
+                    let y = tray_y + tray_height as i32 + 4;
+
                     let _ = window.set_position(PhysicalPosition::new(centered_x, y));
                 } else {
-                    // No tray position yet, use top center as fallback
+                    // No tray position yet, use fallback
+                    #[cfg(target_os = "windows")]
+                    let _ = window.as_ref().window().move_window(Position::BottomCenter);
+
+                    #[cfg(not(target_os = "windows"))]
                     let _ = window.as_ref().window().move_window(Position::TopCenter);
                 }
             }
@@ -44,10 +58,10 @@ fn toggle_window_visibility(app: &tauri::AppHandle) {
     }
 }
 
-fn store_tray_position(x: i32, y: i32, height: u32) {
+fn store_tray_position(center_x: i32, tray_y: i32, tray_height: u32) {
     if let Ok(mut guard) = TRAY_POSITION.lock() {
-        // Store position below tray icon
-        *guard = Some((x, y + height as i32 + 4));
+        // Store raw tray position - calculation happens in toggle_window_visibility
+        *guard = Some((center_x, tray_y, tray_height));
     }
 }
 
