@@ -1,65 +1,17 @@
-name: Build
+name: Build Windows
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
-    inputs:
-      platform:
-        description: 'Platform to build'
-        required: true
-        default: 'all'
-        type: choice
-        options:
-          - all
-          - windows
-          - macos
-          - linux
 
 jobs:
-  release:
+  build:
     permissions:
       contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # macOS
-          - platform: macos-latest
-            args: '--target aarch64-apple-darwin'
-            targets: 'aarch64-apple-darwin'
-            os_name: macos
-          - platform: macos-latest
-            args: '--target x86_64-apple-darwin'
-            targets: 'x86_64-apple-darwin'
-            os_name: macos
-          # Windows
-          - platform: windows-latest
-            args: ''
-            targets: ''
-            os_name: windows
-          # Linux
-          - platform: ubuntu-22.04
-            args: ''
-            targets: ''
-            os_name: linux
-
-    runs-on: ${{ matrix.platform }}
-    # Skip if platform filter doesn't match (for manual runs)
-    if: |
-      github.event_name == 'release' ||
-      inputs.platform == 'all' ||
-      inputs.platform == matrix.os_name
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Install Linux dependencies
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -68,8 +20,6 @@ jobs:
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.targets }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
@@ -84,10 +34,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # When triggered by release event, upload to that release
-          # When triggered manually, create a new release
-          releaseId: ${{ github.event.release.id || '' }}
-          tagName: v__VERSION__
-          releaseName: "minidot v__VERSION__"
+          tagName: test-windows
+          releaseName: "Test Windows Build"
           releaseDraft: true
-          args: ${{ matrix.args }}
