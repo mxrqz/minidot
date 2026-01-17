@@ -4,6 +4,17 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to build'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - windows
+          - macos
+          - linux
 
 jobs:
   release:
@@ -17,19 +28,28 @@ jobs:
           - platform: macos-latest
             args: '--target aarch64-apple-darwin'
             targets: 'aarch64-apple-darwin'
+            os_name: macos
           - platform: macos-latest
             args: '--target x86_64-apple-darwin'
             targets: 'x86_64-apple-darwin'
+            os_name: macos
           # Windows
           - platform: windows-latest
             args: ''
             targets: ''
+            os_name: windows
           # Linux
           - platform: ubuntu-22.04
             args: ''
             targets: ''
+            os_name: linux
 
     runs-on: ${{ matrix.platform }}
+    # Skip if platform filter doesn't match (for manual runs)
+    if: |
+      github.event_name == 'release' ||
+      inputs.platform == 'all' ||
+      inputs.platform == matrix.os_name
 
     steps:
       - name: Checkout repository
